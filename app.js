@@ -1,5 +1,5 @@
 const BASE_URL =
-  "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies";
+  "https://api.currencyapi.com/v3/latest?apikey=cur_live_89Ty1zFyggNYmPIeMOoeRbAM6QnHxNMRs1WRx0lr";
 
 const dropdowns = document.querySelectorAll(".dropdown select");
 const btn = document.querySelector("form button");
