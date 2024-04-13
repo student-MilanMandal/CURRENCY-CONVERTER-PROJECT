@@ -1,5 +1,5 @@
-const BASE_URL =
-  "https://api.currencyapi.com/v3/latest?apikey=cur_live_89Ty1zFyggNYmPIeMOoeRbAM6QnHxNMRs1WRx0lr";
+const apikey = "b2b009018f816edf063d7b37";
+const BASE_URL = `https://v6.exchangerate-api.com/v6/${apikey}/latest/`;
 
 const dropdowns = document.querySelectorAll(".dropdown select");
 const btn = document.querySelector("form button");
@@ -8,14 +8,14 @@ const toCurr = document.querySelector(".to select");
 const msg = document.querySelector(".msg");
 
 for (let select of dropdowns) {
-  for (currCode in countryList) {
+  for (let currCode in countryList) {
     let newOption = document.createElement("option");
     newOption.innerText = currCode;
     newOption.value = currCode;
     if (select.name === "from" && currCode === "USD") {
-      newOption.selected = "selected";
+      newOption.selected = true;
     } else if (select.name === "to" && currCode === "INR") {
-      newOption.selected = "selected";
+      newOption.selected = true;
     }
     select.append(newOption);
   }
@@ -31,16 +31,18 @@ const updateExchangeRate = async () => {
     amtVal = 1;
     amount.value = "1";
   }
-  // console.log(fromCurr.value, toCurr.value);
-  const URL = `${BASE_URL}/${fromCurr.value.toLowerCase()}/${toCurr.value.toLowerCase()}.json`;
+  const URL = `${BASE_URL}${fromCurr.value.toUpperCase()}`;
   let response = await fetch(URL);
-  console.log(response);
   let data = await response.json();
-  let rate = data[toCurr.value.toLowerCase()];
-  console.log(rate);
-
-  let finalAmount = amtVal * rate;
-  msg.innerText = `${amtVal} ${fromCurr.value}= ${finalAmount} ${toCurr.value}`;
+  if (data.result === "success") {
+    let rate = data.conversion_rates[toCurr.value.toUpperCase()];
+    let finalAmount = amtVal * rate;
+    msg.innerText = `${amtVal} ${fromCurr.value} = ${finalAmount.toFixed(2)} ${
+      toCurr.value
+    }`;
+  } else {
+    msg.innerText = "Failed to fetch exchange rate. Please try again later.";
+  }
 };
 
 const updateFlag = (element) => {
